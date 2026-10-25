@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="stylesheet" href="styles.css?v=14">
 </head>
 <body>
   <a class="skip-link" href="#colecao">Pular para a coleção</a>
@@ -119,7 +119,7 @@
               Fale conosco
             </a>
           </div>
-          <a href="#provador" class="hero__try reveal" style="--d:.45s" data-tryon="roma">
+          <a href="#provador" class="hero__try reveal" style="--d:.45s" data-tryon="roma" data-hero-try>
             <span class="hero__try-tag">Novo</span>
             Experimente no provador virtual
             <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
@@ -133,7 +133,7 @@
             <div class="hero__glasses" id="heroGlasses" role="img" aria-label="Óculos modelo Roma"></div>
           </div>
           <div class="hero__picker">
-            <p class="hero__picker-label">Roma <span id="heroColorName">· Tartaruga</span></p>
+            <p class="hero__picker-label"><span id="heroModelName">Roma</span> <span id="heroColorName">· Tartaruga</span></p>
             <div class="swatches" id="heroSwatches" role="radiogroup" aria-label="Cor da armação do modelo Roma"></div>
           </div>
         </div>
@@ -197,7 +197,7 @@
             <li>Funciona no celular e no computador</li>
             <li>Sem câmera? Envie uma selfie</li>
           </ul>
-          <button type="button" class="btn btn--dark reveal" data-tryon="roma">
+          <button type="button" class="btn btn--dark reveal" data-tryon="roma" data-hero-try>
             <svg class="icon" aria-hidden="true"><use href="#i-face"/></svg>
             Abrir o provador
           </button>
@@ -484,7 +484,8 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="script.js?v=9"></script>
-  <script type="module" src="tryon.js?v=6"></script>
+  <script src="catalog.js?v=2"></script>
+  <script src="script.js?v=10"></script>
+  <script type="module" src="tryon.js?v=7"></script>
 </body>
 </html>

@@ -2,114 +2,7 @@
    Godoy | Óculos Premium — mostruário interativo
    ========================================================================== */
 
-const WHATSAPP = "5581982888904";
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/* ---------- Catálogo ----------
-   Para trocar por fotos reais, adicione `image: "fotos/roma.jpg"` no produto:
-   o card passa a usar a foto no lugar da ilustração. */
-
-const FRAMES = {
-  preto:     { label: "Preto",      color: "#16181D" },
-  tartaruga: { label: "Tartaruga",  pattern: "tortoise", swatch: "radial-gradient(circle at 30% 30%, #A8692F 0 18%, #6B3D1C 19% 46%, #2B1508 47% 60%, #8A5A2B 61%)" },
-  cristal:   { label: "Cristal",    color: "#C9D2DA" },
-  fume:      { label: "Fumê",       color: "#55585E" },
-  marinho:   { label: "Azul-marinho", color: "#1E2A44" },
-  vinho:     { label: "Vinho",      color: "#5B1F2A" },
-  dourado:   { label: "Dourado",    color: "#BF9A57", swatch: "linear-gradient(135deg, #E3C88E, #A9844F)" },
-  prata:     { label: "Prata",      color: "#A9ADB3", swatch: "linear-gradient(135deg, #E1E3E6, #8E9298)" },
-  madeira:   { label: "Madeira",    pattern: "wood", swatch: "repeating-linear-gradient(100deg, #8B5A33 0 3px, #A87545 3px 6px, #7A4C2A 6px 8px)" },
-};
-
-const LENSES = {
-  escuro:  { label: "Escura G15",   top: "#2C2E33", bottom: "#0D0E11", opacity: .93 },
-  ambar:   { label: "Âmbar",        top: "#D9A257", bottom: "#93591F", opacity: .86 },
-  verde:   { label: "Verde",        top: "#56624A", bottom: "#242A1F", opacity: .92 },
-  marrom:  { label: "Marrom degradê", top: "#4A2F1D", bottom: "#C8986A", opacity: .86 },
-  azul:    { label: "Azul espelhada", top: "#5B8FC4", bottom: "#132F50", opacity: .92 },
-  rose:    { label: "Rosé",         top: "#D9A094", bottom: "#9A5A50", opacity: .78 },
-};
-
-/* Formas desenhadas a partir da lente esquerda (viewBox 240×112); a direita é espelhada. */
-const SHAPES = {
-  redondo: {
-    lens: "M32,58 a36,36 0 1,0 72,0 a36,36 0 1,0 -72,0",
-    sw: 6.5, bridge: "M103,52 Q120,38 137,52", hinge: [33, 50],
-  },
-  wayfarer: {
-    lens: "M26,34 Q26,27 34,27 L102,30 Q110,31 108,40 L102,74 Q99,88 84,88 L50,88 Q34,88 31,74 Z",
-    sw: 8, bridge: "M107,42 Q120,33 133,42", hinge: [27, 33],
-  },
-  quadrado: {
-    lens: "M22,28 Q22,22 28,22 L104,24 Q110,24 110,30 L108,78 Q106,92 92,92 L38,92 Q24,92 22,78 Z",
-    sw: 7, bridge: "M110,44 Q120,37 130,44", hinge: [22, 30],
-  },
-  clubmaster: {
-    lens: "M31,42 L106,42 L104,62 Q100,88 70,88 Q38,88 33,64 Z",
-    sw: 3, metalRim: true,
-    brow: "M24,32 Q24,24 34,24 L102,24 Q111,24 110,33 L109,47 L30,47 Q24,47 24,40 Z",
-    bridge: "M108,40 Q120,33 132,40", hinge: [24, 32],
-  },
-  aviador: {
-    lens: "M30,36 Q30,26 46,26 L98,27 Q110,28 109,40 Q106,70 86,84 Q72,92 56,88 Q32,80 30,52 Z",
-    sw: 3.2, metal: true,
-    bridge: "M107,36 Q120,29 133,36", topbar: "M98,25 L142,25", hinge: [30, 32],
-  },
-  gatinho: {
-    lens: "M18,24 Q60,30 104,36 Q113,38 108,52 Q100,84 68,86 Q38,86 30,64 Q24,46 18,24 Z",
-    sw: 7, bridge: "M106,45 Q120,36 134,45", hinge: [19, 26],
-  },
-  hexagonal: {
-    lens: "M48,22 L90,22 L108,56 L90,90 L48,90 L30,56 Z",
-    sw: 3.5, metal: true, bridge: "M106,48 Q120,40 134,48", hinge: [31, 52],
-  },
-};
-
-const PRODUCTS = [
-  { id: "roma", name: "Roma", shape: "redondo", category: "redondo", type: "Redondo · Acetato",
-    badge: "Várias cores", desc: "O redondo clássico, com armação encorpada em acetato. Disponível em várias cores para combinar com o seu estilo.",
-    frames: ["tartaruga", "preto", "cristal", "marinho"], lenses: ["ambar", "escuro", "verde"],
-    material: "Acetato", faces: "Quadrado, coração" },
-  { id: "siena", name: "Siena", shape: "wayfarer", category: "quadrado", type: "Wayfarer · Acetato",
-    badge: "Campeão de vendas", badgeShort: "Top vendas", badgeGold: true, desc: "Linhas retas e ponte reforçada. Um ícone atemporal que vai bem com tudo, do dia a dia à praia.",
-    frames: ["preto", "tartaruga", "fume"], lenses: ["escuro", "verde", "marrom"],
-    material: "Acetato", faces: "Redondo, oval" },
-  { id: "milano", name: "Milano", shape: "clubmaster", category: "clubmaster", type: "Clubmaster · Misto",
-    desc: "Sobrancelha em acetato com aro metálico dourado. Elegância retrô com acabamento refinado.",
-    frames: ["tartaruga", "preto", "marinho"], lenses: ["marrom", "escuro", "verde"],
-    material: "Acetato + metal", faces: "Oval, coração" },
-  { id: "firenze", name: "Firenze", shape: "wayfarer", category: "madeira", type: "Wayfarer · Madeira",
-    badge: "Madeira reciclável", badgeShort: "Madeira", desc: "Frente em acetato e hastes de madeira reciclável. Leve, confortável e com um toque natural.",
-    frames: ["preto", "tartaruga", "madeira"], lenses: ["escuro", "ambar", "verde"], temple: "madeira",
-    material: "Acetato + madeira reciclável", faces: "Redondo, oval" },
-  { id: "amalfi", name: "Amalfi", shape: "aviador", category: "aviador", type: "Aviador · Metal",
-    desc: "A gota clássica com ponte dupla e metal leve. Feito para dias de sol forte.",
-    frames: ["dourado", "prata", "preto"], lenses: ["verde", "escuro", "azul"],
-    material: "Metal", faces: "Quadrado, coração, oval" },
-  { id: "capri", name: "Capri", shape: "quadrado", category: "quadrado", type: "Quadrado · Oversized",
-    badge: "Novo", desc: "Quadrado amplo, com presença e proteção extra. O preferido para quem gosta de óculos marcantes.",
-    frames: ["preto", "tartaruga", "cristal", "vinho"], lenses: ["escuro", "marrom", "rose"],
-    material: "Acetato", faces: "Redondo, oval" },
-  { id: "verona", name: "Verona", shape: "gatinho", category: "gatinho", type: "Gatinho · Acetato",
-    desc: "Cantos elevados que realçam o olhar. Feminino, sofisticado e cheio de atitude.",
-    frames: ["preto", "tartaruga", "vinho", "cristal"], lenses: ["escuro", "rose", "marrom"],
-    material: "Acetato", faces: "Oval, quadrado" },
-  { id: "napoli", name: "Napoli", shape: "hexagonal", category: "geometrico", type: "Hexagonal · Metal",
-    desc: "Geometria leve em metal fino. Moderno, discreto e fácil de usar.",
-    frames: ["dourado", "prata", "preto"], lenses: ["verde", "escuro", "ambar"],
-    material: "Metal", faces: "Redondo, oval" },
-];
-
-const CATEGORIES = [
-  { id: "todos", label: "Todos" },
-  { id: "redondo", label: "Redondo" },
-  { id: "quadrado", label: "Quadrado" },
-  { id: "clubmaster", label: "Clubmaster" },
-  { id: "aviador", label: "Aviador" },
-  { id: "gatinho", label: "Gatinho" },
-  { id: "geometrico", label: "Geométrico" },
-  { id: "madeira", label: "Madeira" },
-];
 
 const FACES = [
   { id: "redondo", label: "Redondo", path: '<ellipse cx="60" cy="75" rx="47" ry="54"/>',
@@ -130,9 +23,15 @@ const FACES = [
 
 const state = {
   filter: "todos",
-  sel: Object.fromEntries(PRODUCTS.map(p => [p.id, { frame: p.frames[0], lens: p.lenses[0] }])),
+  sel: {},
   favs: loadFavs(),
 };
+
+/* Seleção inicial de cores; chamado depois que a coleção chega do Supabase. */
+function initState() {
+  state.sel = Object.fromEntries(PRODUCTS.map(p => [p.id, { frame: p.frames[0], lens: p.lenses[0] }]));
+  state.favs = state.favs.filter(id => byId(id));
+}
 
 function loadFavs() {
   try { return JSON.parse(localStorage.getItem("godoy:favs")) || []; } catch { return []; }
@@ -145,73 +44,19 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const byId = id => PRODUCTS.find(p => p.id === id);
 
-/* ---------- Desenho dos óculos (SVG) ---------- */
-
-let uidSeq = 0;
-
-function paint(key, uid) {
-  const f = FRAMES[key];
-  return f.pattern ? `url(#${f.pattern}-${uid})` : f.color;
-}
-
-function patternDefs(uid) {
-  return `
-    <pattern id="tortoise-${uid}" width="30" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(28)">
-      <rect width="30" height="22" fill="#6B3D1C"/>
-      <ellipse cx="6" cy="6" rx="6.5" ry="3.6" fill="#2B1508" opacity=".85"/>
-      <ellipse cx="21" cy="14" rx="7.5" ry="4.2" fill="#A8692F" opacity=".75"/>
-      <ellipse cx="17" cy="4" rx="3" ry="2" fill="#2B1508" opacity=".7"/>
-      <ellipse cx="4" cy="17" rx="4" ry="2.4" fill="#C88A45" opacity=".55"/>
-      <ellipse cx="27" cy="21" rx="3" ry="1.8" fill="#2B1508" opacity=".6"/>
-    </pattern>
-    <pattern id="wood-${uid}" width="14" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(8)">
-      <rect width="14" height="40" fill="#946039"/>
-      <rect x="0" width="3" height="40" fill="#7A4C2A"/>
-      <rect x="6" width="1.5" height="40" fill="#B07A4A"/>
-      <rect x="10" width="2" height="40" fill="#81522E" opacity=".8"/>
-    </pattern>`;
-}
-
-function glassesSVG(product, frameKey, lensKey, { label = "" } = {}) {
-  const s = SHAPES[product.shape];
-  const uid = `g${++uidSeq}`;
-  const L = LENSES[lensKey];
-  const frame = paint(frameKey, uid);
-  const metalShape = s.metal;
-  const rim = s.metalRim ? "#BF9A57" : frame;
-  const templeColor = product.temple ? paint(product.temple, uid) : frame;
-  const [hx, hy] = s.hinge;
-
-  const lens = `
-    <use href="#ln-${uid}" fill="url(#lg-${uid})" fill-opacity="${L.opacity}"/>
-    <g clip-path="url(#cp-${uid})">
-      <g class="glare">
-        <rect x="16" y="-30" width="20" height="170" fill="#fff" opacity=".26" transform="rotate(24 68 56)"/>
-        <rect x="44" y="-30" width="7" height="170" fill="#fff" opacity=".16" transform="rotate(24 68 56)"/>
-      </g>
-    </g>
-    <use href="#ln-${uid}" fill="none" stroke="${rim}" stroke-width="${s.sw}" stroke-linejoin="round"/>
-    ${s.brow ? `<path d="${s.brow}" fill="${frame}"/><path d="M30,28 L100,28" stroke="#fff" stroke-opacity=".18" stroke-width="1.5" stroke-linecap="round"/>` : ""}
-    <path d="M${hx},${hy} l-13,-2.5" stroke="${templeColor}" stroke-width="${metalShape ? 3.4 : 6}" stroke-linecap="round"/>`;
-
-  return `
-  <svg viewBox="0 0 240 112" xmlns="http://www.w3.org/2000/svg" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"'}>
-    <defs>
-      ${patternDefs(uid)}
-      <linearGradient id="lg-${uid}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="${L.top}"/><stop offset="1" stop-color="${L.bottom}"/>
-      </linearGradient>
-      <path id="ln-${uid}" d="${s.lens}"/>
-      <clipPath id="cp-${uid}"><use href="#ln-${uid}"/></clipPath>
-    </defs>
-    <path d="${s.bridge}" fill="none" stroke="${s.metalRim ? rim : frame}" stroke-width="${metalShape || s.metalRim ? 3.2 : s.sw}" stroke-linecap="round"/>
-    ${s.topbar ? `<path d="${s.topbar}" fill="none" stroke="${frame}" stroke-width="2.6" stroke-linecap="round"/>` : ""}
-    <g>${lens}</g>
-    <g transform="matrix(-1 0 0 1 240 0)">${lens}</g>
-  </svg>`;
-}
-
 /* ---------- Helpers ---------- */
+
+/* Foto do produto na cor escolhida; sem foto, a ilustração em SVG. */
+function artHTML(p, frame, lens, { label = "", eager = false } = {}) {
+  const photo = productPhoto(p, frame);
+  if (!photo) return glassesSVG(p, frame, lens, { label });
+  return `<img class="photo" src="${photoURL(photo.path)}" alt="${escapeAttr(label || photo.alt || `Óculos ${p.name}`)}"
+    ${eager ? "" : 'loading="lazy"'} decoding="async">`;
+}
+
+function escapeAttr(s) {
+  return String(s).replace(/[&"<>]/g, c => ({ "&": "&amp;", '"': "&quot;", "<": "&lt;", ">": "&gt;" })[c]);
+}
 
 function swatchHTML(kind, key, checked, size = "") {
   const def = kind === "frame" ? FRAMES[key] : LENSES[key];
@@ -254,11 +99,18 @@ function wireWhatsApp(root = document) {
 /* ---------- Hero ---------- */
 
 function initHero() {
-  const roma = byId("roma");
+  const roma = byId(HERO_PRODUCT) || PRODUCTS[0];
   const holder = $("#heroGlasses");
   const sw = $("#heroSwatches");
-  const heroSel = { frame: "tartaruga", lens: "ambar" };
-  const heroLens = { tartaruga: "ambar", preto: "escuro", cristal: "verde", marinho: "escuro" };
+  // Lente que mais combina com cada armação no destaque (vale quando o modelo tem essas cores)
+  const pairs = { tartaruga: "ambar", preto: "escuro", cristal: "verde", marinho: "escuro" };
+  const lensFor = frame => roma.lenses.includes(pairs[frame]) ? pairs[frame] : roma.lenses[0];
+  const first = roma.frames.includes("tartaruga") ? "tartaruga" : roma.frames[0];
+  const heroSel = { frame: first, lens: lensFor(first) };
+  $$("[data-hero-try]").forEach(el => { el.dataset.tryon = roma.id; });
+  $("#heroGlasses").setAttribute("aria-label", `Óculos modelo ${roma.name}`);
+  $("#heroModelName").textContent = roma.name;
+  $("#heroSwatches").setAttribute("aria-label", `Cor da armação do modelo ${roma.name}`);
 
   const draw = () => {
     holder.innerHTML = glassesSVG(roma, heroSel.frame, heroSel.lens);
@@ -269,7 +121,7 @@ function initHero() {
     const b = e.target.closest(".swatch");
     if (!b) return;
     heroSel.frame = b.dataset.key;
-    heroSel.lens = heroLens[b.dataset.key];
+    heroSel.lens = lensFor(b.dataset.key);
     $$(".swatch", sw).forEach(x => x.setAttribute("aria-checked", x === b));
     draw();
   });
@@ -309,8 +161,8 @@ function cardHTML(p, i) {
     <button class="heart" type="button" aria-pressed="${fav}" aria-label="${fav ? "Remover dos" : "Adicionar aos"} favoritos: ${p.name}" data-fav="${p.id}">
       <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>
     </button>
-    <button class="card__media" type="button" data-open="${p.id}" aria-label="Ver detalhes do modelo ${p.name}">
-      ${glassesSVG(p, frame, lens)}
+    <button class="card__media ${productPhoto(p, frame) ? "has-photo" : ""}" type="button" data-open="${p.id}" aria-label="Ver detalhes do modelo ${p.name}">
+      ${artHTML(p, frame, lens, { eager: i < 2 })}
       <span class="card__view" aria-hidden="true">Ver detalhes</span>
     </button>
     <div class="card__body">
@@ -355,7 +207,13 @@ function updateCard(id) {
   if (!card) return;
   const p = byId(id);
   const { frame, lens } = state.sel[id];
-  $(".card__media", card).firstElementChild.outerHTML = glassesSVG(p, frame, lens);
+  const media = $(".card__media", card);
+  const art = artHTML(p, frame, lens, { eager: true });
+  // Mesma foto para outra cor: não recarrega a imagem
+  if (!(media.firstElementChild.tagName === "IMG" && art.includes(media.firstElementChild.getAttribute("src")))) {
+    media.firstElementChild.outerHTML = art;
+  }
+  media.classList.toggle("has-photo", !!productPhoto(p, frame));
   $$(".swatch", card).forEach(s => s.setAttribute("aria-checked", s.dataset.key === frame));
   $(".card__color", card).textContent = `${FRAMES[frame].label} · ${LENSES[lens].label}`;
   $(".card__cta", card).href = waLink(productMessage(p));
@@ -439,7 +297,7 @@ function renderFavSheet() {
   list.innerHTML = state.favs.map(id => {
     const p = byId(id), s = state.sel[id];
     return `<li class="fav-item">
-      <div class="fav-item__img">${glassesSVG(p, s.frame, s.lens)}</div>
+      <div class="fav-item__img">${artHTML(p, s.frame, s.lens)}</div>
       <div><p class="fav-item__name">${p.name}</p><p class="fav-item__meta">${FRAMES[s.frame].label} · ${LENSES[s.lens].label}</p></div>
       <button type="button" data-unfav="${id}" aria-label="Remover ${p.name} dos favoritos"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
     </li>`;
@@ -487,14 +345,21 @@ function finishClose(dialog) {
 function productDetailHTML(p) {
   const { frame, lens } = state.sel[p.id];
   const fav = state.favs.includes(p.id);
+  const photo = productPhoto(p, frame);
+  const thumbs = (p.images || []).length > 1 ? `
+    <div class="pd__thumbs" role="list" aria-label="Fotos do modelo">
+      ${p.images.map((img, i) => `<button type="button" role="listitem" class="pd__thumb" data-photo="${i}" aria-pressed="${img === photo}"
+        aria-label="Foto ${i + 1}${img.frame && FRAMES[img.frame] ? `, armação ${FRAMES[img.frame].label}` : ""}">
+        <img src="${photoURL(img.path)}" alt="" loading="lazy" decoding="async"></button>`).join("")}
+    </div>` : "";
   return `
-    <div class="pd__stage" id="pdStage">
-      ${glassesSVG(p, frame, lens, { label: `Óculos ${p.name}, armação ${FRAMES[frame].label}, lente ${LENSES[lens].label}` })}
+    <div class="pd__stage ${photo ? "has-photo" : ""}" id="pdStage">
+      ${artHTML(p, frame, lens, { eager: true, label: `Óculos ${p.name}, armação ${FRAMES[frame].label}, lente ${LENSES[lens].label}` })}
       <button class="heart" type="button" aria-pressed="${fav}" aria-label="${fav ? "Remover dos" : "Adicionar aos"} favoritos: ${p.name}" data-fav="${p.id}">
         <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>
       </button>
-      <p class="pd__hint" aria-hidden="true">Ilustração do modelo</p>
-    </div>
+      ${photo ? "" : '<p class="pd__hint" aria-hidden="true">Ilustração do modelo</p>'}
+    </div>${thumbs}
     <div class="pd__head">
       <h2 class="pd__name" id="sheetTitle">${p.name}</h2>
       <p class="pd__type">${p.type}</p>
@@ -552,7 +417,9 @@ function initSheets() {
     if (sw) {
       state.sel[id][sw.dataset.kind] = sw.dataset.key;
       const p = byId(id), { frame, lens } = state.sel[id];
-      $(".pd__stage svg", body).outerHTML = glassesSVG(p, frame, lens, { label: `Óculos ${p.name}, armação ${FRAMES[frame].label}, lente ${LENSES[lens].label}` });
+      if (sw.dataset.kind === "frame" || !productPhoto(p, frame)) {
+        showStageArt(p, artHTML(p, frame, lens, { eager: true, label: `Óculos ${p.name}, armação ${FRAMES[frame].label}, lente ${LENSES[lens].label}` }), productPhoto(p, frame));
+      }
       $$(`.swatch[data-kind="${sw.dataset.kind}"]`, body).forEach(x => x.setAttribute("aria-checked", x === sw));
       $("#pdFrameName").textContent = `· ${FRAMES[frame].label}`;
       $("#pdLensName").textContent = `· ${LENSES[lens].label}`;
@@ -561,9 +428,23 @@ function initSheets() {
       syncFavUI();
       return;
     }
+    const thumb = e.target.closest("[data-photo]");
+    if (thumb) {
+      const p = byId(id), img = p.images[+thumb.dataset.photo];
+      return showStageArt(p, `<img class="photo" src="${photoURL(img.path)}" alt="${escapeAttr(img.alt || `Óculos ${p.name}`)}" decoding="async">`, img);
+    }
     const fav = e.target.closest("[data-fav]");
     if (fav) toggleFav(fav.dataset.fav);
   });
+
+  function showStageArt(p, html, photo) {
+    const stage = $("#pdStage", body);
+    stage.firstElementChild.outerHTML = html;
+    stage.classList.toggle("has-photo", !!photo);
+    $(".pd__hint", stage)?.remove();
+    if (!photo) stage.insertAdjacentHTML("beforeend", '<p class="pd__hint" aria-hidden="true">Ilustração do modelo</p>');
+    $$(".pd__thumb", body).forEach((t, i) => t.setAttribute("aria-pressed", p.images[i] === photo));
+  }
 
   // Inclinação do produto no detalhe
   body.addEventListener("pointermove", e => {
@@ -572,7 +453,8 @@ function initSheets() {
     const r = stage.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - .5;
     const y = (e.clientY - r.top) / r.height - .5;
-    $("svg", stage).style.transform = `rotateY(${x * 24}deg) rotateX(${-y * 16}deg) scale(1.03)`;
+    const svg = $(":scope > svg", stage);
+    if (svg) svg.style.transform = `rotateY(${x * 24}deg) rotateX(${-y * 16}deg) scale(1.03)`;
   });
   body.addEventListener("pointerout", e => {
     if (e.target.closest("#pdStage") && !e.relatedTarget?.closest?.("#pdStage")) {
@@ -630,7 +512,9 @@ function faceSVG(face, cls = "") {
 
 function renderFace(id) {
   const face = FACES.find(f => f.id === id);
-  const sample = byId(face.picks[0]);
+  const picks = face.picks.filter(byId);
+  if (!picks.length) picks.push(...PRODUCTS.slice(0, 3).map(p => p.id));
+  const sample = byId(picks[0]);
   const panel = $("#facePanel");
   panel.classList.remove("is-swapping");
   void panel.offsetWidth;
@@ -643,7 +527,7 @@ function renderFace(id) {
     <h3 class="face-card__title">${face.title}</h3>
     <p class="face-card__text">${face.text}</p>
     <div class="face-card__models">
-      ${face.picks.map(pid => `<button type="button" data-face-pick="${pid}">${byId(pid).name}
+      ${picks.map(pid => `<button type="button" data-face-pick="${pid}">${byId(pid).name}
         <svg class="icon" aria-hidden="true" style="width:16px;height:16px"><use href="#i-arrow"/></svg></button>`).join("")}
     </div>`;
   $$(".face-tab").forEach(t => t.setAttribute("aria-selected", t.dataset.face === id));
@@ -766,21 +650,27 @@ function initCounters() {
 
 /* ---------- API usada pelo provador (tryon.js) ---------- */
 
+async function start() {
+  initChrome();
+  initReveal();
+  initCounters();
+  document.body.classList.add("is-loading-catalog");
+  await loadCatalog();
+  document.body.classList.remove("is-loading-catalog");
+  initState();
+  $$('a[href*="instagram.com/"]').forEach(a => { a.href = `https://www.instagram.com/${INSTAGRAM}`; });
+  wireWhatsApp();
+  initHero();
+  initCollection();
+  initFaces();
+  initDemo();
+  initFavs();
+  initSheets();
+}
+
 window.Godoy = {
   PRODUCTS, FRAMES, LENSES, state, byId,
   glassesSVG, swatchHTML, waLink, productMessage, toast, updateCard,
   closeAllSheets: () => $$(".sheet").forEach(d => d.open && finishClose(d)),
+  ready: start(),
 };
-
-/* ---------- Start ---------- */
-
-wireWhatsApp();
-initHero();
-initCollection();
-initFaces();
-initDemo();
-initFavs();
-initSheets();
-initChrome();
-initReveal();
-initCounters();

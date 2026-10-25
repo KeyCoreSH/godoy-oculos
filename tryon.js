@@ -4,6 +4,8 @@
    ========================================================================== */
 
 const G = window.Godoy;
+// Espera a coleção chegar do Supabase antes de montar o provador
+await G.ready;
 
 const VISION_URL = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
 const MODEL_URL = "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task";
